@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onboarding/home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -45,9 +46,6 @@ class _OnboardingState extends State<Onboarding>
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -57,11 +55,16 @@ class _OnboardingState extends State<Onboarding>
             onPressed: () {
               _controller.forward();
             },
-            child: const Text(
-              'Skip',
-              style: TextStyle(
-                color: Colors.purple,
-                fontSize: 18,
+            child: GestureDetector(
+              onTap: () {
+                MaterialPageRoute(builder: (context) => const Home());
+              },
+              child: const Text(
+                'Skip',
+                style: TextStyle(
+                  color: Colors.purple,
+                  fontSize: 18,
+                ),
               ),
             ),
           ),
@@ -73,10 +76,6 @@ class _OnboardingState extends State<Onboarding>
         child: SizedBox(
           height: kToolbarHeight + 20,
           width: 10,
-          // decoration: BoxDecoration(
-          //   color: Colors.black,
-          //   borderRadius: BorderRadius.circular(10),
-          // ),
           child: Center(
             child: Stack(
               children: [
@@ -97,29 +96,44 @@ class _OnboardingState extends State<Onboarding>
                   right: 0,
                   bottom: 0,
                   top: 0,
-                  child: Container(
-                    width: 45,
-                    height: 45,
-                    padding: const EdgeInsets.all(5),
-                    child: GestureDetector(
-                      onTapDown: (_) {
-                        _controller.value += .25;
-                      },
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.purple,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
+                  child: NextButton(controller: _controller),
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class NextButton extends StatelessWidget {
+  const NextButton({
+    Key? key,
+    required AnimationController controller,
+  })  : _controller = controller,
+        super(key: key);
+
+  final AnimationController _controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 45,
+      height: 45,
+      padding: const EdgeInsets.all(5),
+      child: GestureDetector(
+        onTapDown: (_) {
+          _controller.value += .25;
+        },
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Colors.purple,
+            shape: BoxShape.circle,
+          ),
+          child: const Icon(
+            Icons.arrow_forward_ios_rounded,
+            color: Colors.white,
           ),
         ),
       ),
